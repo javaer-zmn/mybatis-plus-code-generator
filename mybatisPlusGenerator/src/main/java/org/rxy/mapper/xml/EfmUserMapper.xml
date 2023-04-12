@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.rxy.mapper.EfmUserMapper">
+
+
+    <select id="findEfmUserPageList" resultType="org.rxy.entity.EfmUser">
+        SELECT
+        *
+        FROM
+        efm_user
+        WHERE
+        <if test="fuzzySearchStr != null and fuzzySearchStr != '' ">
+            FuzzySearch LIKE CONCAT(CONCAT('%',#{fuzzySearchStr},'%')) AND
+        </if>
+        IsDel = 0
+    </select>
+</mapper>

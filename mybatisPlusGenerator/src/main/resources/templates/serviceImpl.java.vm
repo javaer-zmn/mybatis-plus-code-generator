@@ -1,0 +1,57 @@
+package ${package.ServiceImpl};
+
+import ${package.Entity}.${entity};
+import ${package.Mapper}.${table.mapperName};
+import ${package.Service}.${table.serviceName};
+import ${superServiceImplClassPackage};
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import java.text.SimpleDateFormat;
+import java.util.List;
+/**
+ * <p>
+ * $!{table.comment} 服务实现类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Service
+@Transactional
+public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}> implements ${table.serviceName} {
+        @Autowired
+        private ${table.mapperName} ${table.entityPath}Mapper;
+
+        @Override
+        public Page<${entity}> select${entity}Page(PageQuery pageQuery) {
+                String fuzzySearchStr = ""; // 模糊查询字段
+                Page<${entity}> page = new Page<>(pageQuery.getPage(),pageQuery.getRow());
+                List<${entity}> list = ${table.entityPath}Mapper.find${entity}PageList(page,fuzzySearchStr);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                list.forEach(item->{
+                item.setAddTimeStr(simpleDateFormat.format(item.getAddTime()));
+                });
+                page.setRecords(list);
+                return page;
+        }
+
+        /**
+        * 查询名称是否存在
+        * @param name 名称
+        * @param id 主键
+        * @return
+        */
+        @Override
+        public boolean IsNameExists(String name, Integer id) {
+                QueryWrapper<${entity}> queryWrapper = new QueryWrapper<>();
+                queryWrapper.lambda().and(c->c.eq(${entity}::getName,name));
+                if (0 != id) {
+                queryWrapper.lambda().and(c->c.ne(${entity}::getId, id));
+                }
+                return ${table.entityPath}Mapper.selectCount(queryWrapper)>0;
+        }
+}
