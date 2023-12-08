@@ -1,6 +1,6 @@
 package ${package.ServiceImpl};
 
-import ${package.Entity}.${entity};
+import ${package.Entity}.${entity}DO;
 import ${package.Mapper}.${table.mapperName};
 import ${package.Service}.${table.serviceName};
 import ${superServiceImplClassPackage};
@@ -22,15 +22,15 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}> implements ${table.serviceName} {
+public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}DO> implements ${table.serviceName} {
         @Autowired
         private ${table.mapperName} ${table.entityPath}Mapper;
 
         @Override
-        public Page<${entity}> select${entity}Page(PageQuery pageQuery) {
+        public Page<${entity}DO> select${entity}DOPage(PageQuery pageQuery) {
                 String fuzzySearchStr = ""; // 模糊查询字段
-                Page<${entity}> page = new Page<>(pageQuery.getPage(),pageQuery.getRow());
-                List<${entity}> list = ${table.entityPath}Mapper.find${entity}PageList(page,fuzzySearchStr);
+                Page<${entity}DO> page = new Page<>(pageQuery.getPage(),pageQuery.getRow());
+                List<${entity}DO> list = ${table.entityPath}Mapper.find${entity}DOPageList(page,fuzzySearchStr);
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 list.forEach(item->{
                 item.setAddTimeStr(simpleDateFormat.format(item.getAddTime()));
@@ -47,10 +47,10 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
         */
         @Override
         public boolean IsNameExists(String name, Integer id) {
-                QueryWrapper<${entity}> queryWrapper = new QueryWrapper<>();
-                queryWrapper.lambda().and(c->c.eq(${entity}::getName,name));
+                QueryWrapper<${entity}DO> queryWrapper = new QueryWrapper<>();
+                queryWrapper.lambda().and(c->c.eq(${entity}DO::getName,name));
                 if (0 != id) {
-                queryWrapper.lambda().and(c->c.ne(${entity}::getId, id));
+                queryWrapper.lambda().and(c->c.ne(${entity}DO::getId, id));
                 }
                 return ${table.entityPath}Mapper.selectCount(queryWrapper)>0;
         }

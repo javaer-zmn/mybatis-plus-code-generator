@@ -30,7 +30,7 @@ public class ${entity} extends ${superEntityClass}#if(${activeRecord})<${entity}
 #elseif(${activeRecord})
 public class ${entity} extends Model<${entity}> {
 #else
-public class ${entity} implements Serializable {
+public class ${entity}DO implements Serializable {
 #end
 ## private static final long serialVersionUID = 1L;
 ## ----------  BEGIN 字段循环遍历  ----------
@@ -124,7 +124,7 @@ protected Serializable pkVal() {
 #if(!${entityLombokModel})
 @Override
 public String toString() {
-        return "${entity}{" +
+        return "${entity}DO{" +
     #foreach($field in ${table.fields})
         #if($!{velocityCount}==1)
                 "${field.propertyName}=" + ${field.propertyName} +

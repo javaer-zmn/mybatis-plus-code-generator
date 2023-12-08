@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import lombok.var;
 import java.util.List;
 import ${package.Service}.${table.serviceName};
-import ${package.Entity}.${entity};
+import ${package.Entity}.${entity}DO;
 import java.text.SimpleDateFormat;
 
 /**
@@ -37,7 +37,7 @@ import java.text.SimpleDateFormat;
 #else
 @Controller
 #end
-@RequestMapping("${entity}/")
+@RequestMapping("${entity}DO/")
 #if(${swagger2})
 @Api(value = "/${table.controllerName}", tags = "")
 #end
@@ -47,7 +47,7 @@ public class ${table.controllerName} extends ${superControllerClass} {
 public class ${table.controllerName} {
 #end
     @Autowired
-    public ${table.serviceName} i${entity}Service;
+    public ${table.serviceName} i${entity}DOService;
 
     @Autowired
     private HttpServletRequest request;
@@ -61,25 +61,25 @@ public class ${table.controllerName} {
      * @param pageQuery  查询条件 Page,Row 为必要参数
      * @return BoardMessage
      */
-    @PostMapping(value = "Get${entity}PageList")
+    @PostMapping(value = "Get${entity}DOPageList")
     @ResponseBody
     #if(${swagger2})
     @ApiOperation(value = "获取分页列表", notes = "获取分页列表", response = BoardMessage.class)
     #end
-    public BoardMessage Get${entity}PageList(@RequestBody PageQuery pageQuery) {
+    public BoardMessage Get${entity}DOPageList(@RequestBody PageQuery pageQuery) {
 
         // 验证用户信息
         var tempVal = TokenUse.verificationTokenInfo(request);
         if (tempVal == null) {
-            return new BoardMessage(ErrorCode.getTokenId(), "Token无效，请重新登入", " Get${entity}PageList",null);
+            return new BoardMessage(ErrorCode.getTokenId(), "Token无效，请重新登入", " Get${entity}DOPageList",null);
         }
 
         BoardMessage message;
         try {
-            Page<${entity}> page = i${entity}Service.select${entity}Page(pageQuery);
-            return new BoardMessage(ErrorCode.getSuccess(),"",page," Get${entity}PageList", tempVal);
+            Page<${entity}DO> page = i${entity}DOService.select${entity}DOPage(pageQuery);
+            return new BoardMessage(ErrorCode.getSuccess(),"",page," Get${entity}DOPageList", tempVal);
         } catch (Exception e) {
-            message = new BoardMessage(ErrorCode.getException(),e.toString()," Get${entity}PageList", tempVal);
+            message = new BoardMessage(ErrorCode.getException(),e.toString()," Get${entity}DOPageList", tempVal);
         }
         return message;
     }
@@ -88,27 +88,27 @@ public class ${table.controllerName} {
     * 查询列表数据
     * @return BoardMessage
     */
-    @GetMapping(value = "Get${entity}List")
+    @GetMapping(value = "Get${entity}DOList")
     @ResponseBody
     @ApiOperation(value = "查询列表数据", notes = "查询列表数据", response = BoardMessage.class)
-    public BoardMessage Get${entity}List() {
+    public BoardMessage Get${entity}DOList() {
 
         // 验证用户信息
         var tempVal = TokenUse.verificationTokenInfo(request);
         if (tempVal == null) {
-            return new BoardMessage(ErrorCode.getTokenId(), "Token无效，请重新登入", " Get${entity}List",null);
+            return new BoardMessage(ErrorCode.getTokenId(), "Token无效，请重新登入", " Get${entity}DOList",null);
         }
 
         BoardMessage message;
         try {
-            List<${entity}> list = i${entity}Service.list();
+            List<${entity}DO> list = i${entity}DOService.list();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             list.forEach(item->{
             item.setAddTimeStr(simpleDateFormat.format(item.getAddTime()));
             });
-            return new BoardMessage(ErrorCode.getSuccess(),"",list," Get${entity}List", tempVal);
+            return new BoardMessage(ErrorCode.getSuccess(),"",list," Get${entity}DOList", tempVal);
         } catch (Exception e) {
-            message = new BoardMessage(ErrorCode.getException(),e.toString()," Get${entity}List", tempVal);
+            message = new BoardMessage(ErrorCode.getException(),e.toString()," Get${entity}DOList", tempVal);
         }
         return message;
     }
@@ -117,43 +117,43 @@ public class ${table.controllerName} {
      * 查询树列表
      * @return BoardMessage
      */
-    @PostMapping(value = "Get${entity}TreeList")
+    @PostMapping(value = "Get${entity}DOTreeList")
     @ResponseBody
     @ApiOperation(value = "查询树列表", notes = "查询树列表", response = BoardMessage.class)
-    public BoardMessage Get${entity}TreeList() {
+    public BoardMessage Get${entity}DOTreeList() {
 
         // 验证用户信息
         var tempVal = TokenUse.verificationTokenInfo(request);
         if (tempVal == null) {
-        return new BoardMessage(ErrorCode.getTokenId(), "Token无效，请重新登入", " Get${entity}TreeList",null);
+        return new BoardMessage(ErrorCode.getTokenId(), "Token无效，请重新登入", " Get${entity}DOTreeList",null);
         }
 
         BoardMessage message;
         try {
-        List<${entity}> list = i${entity}Service.list();
-        Map<Integer, List<${entity}>> mapByPid = list.stream().collect(Collectors.groupingBy(${entity}::getPId));
+        List<${entity}DO> list = i${entity}DOService.list();
+        Map<Integer, List<${entity}DO>> mapByPid = list.stream().collect(Collectors.groupingBy(${entity}DO::getPId));
         list.forEach(department->{
         department.setChildren(mapByPid.get(department.getId()));
         });
-        List<${entity}> collect = list.stream().filter(v -> v.getPId().equals(0)).collect(Collectors.toList());
-        return new BoardMessage(ErrorCode.getSuccess(),"",collect," Get${entity}TreeList", tempVal);
+        List<${entity}DO> collect = list.stream().filter(v -> v.getPId().equals(0)).collect(Collectors.toList());
+        return new BoardMessage(ErrorCode.getSuccess(),"",collect," Get${entity}DOTreeList", tempVal);
         } catch (Exception e) {
-        message = new BoardMessage(ErrorCode.getException(),e.toString()," Get${entity}TreeList", tempVal);
+        message = new BoardMessage(ErrorCode.getException(),e.toString()," Get${entity}DOTreeList", tempVal);
         }
         return message;
     }
 
     /**
-     * 添加${entity}
-     * @param vue${entity} 请求参数对象
+     * 添加${entity}DO
+     * @param vue${entity}DO 请求参数对象
      * @return BoardMessage
      */
-    @PostMapping(value = "Insert${entity}")
+    @PostMapping(value = "Insert${entity}DO")
     #if(${swagger2})
-    @ApiOperation(value = "添加${entity}", notes = "添加${entity}", response = BoardMessage.class)
+    @ApiOperation(value = "添加${entity}DO", notes = "添加${entity}DO", response = BoardMessage.class)
     #end
     @ResponseBody
-    public BoardMessage Insert${entity}(@RequestBody Vue${entity} vue${entity}) {
+    public BoardMessage Insert${entity}DO(@RequestBody Vue${entity}DO vue${entity}DO) {
 
         // 验证用户信息
         var tempVal = TokenUse.verificationTokenInfo(request);
@@ -163,34 +163,34 @@ public class ${table.controllerName} {
 
         BoardMessage message;
         try {
-            if (i${entity}Service.IsNameExists(vue${entity}.getName(), 0)) {
-                message = new BoardMessage(ErrorCode.getFail(), "名称已存在", "Insert${entity}", tempVal);
+            if (i${entity}DOService.IsNameExists(vue${entity}DO.getName(), 0)) {
+                message = new BoardMessage(ErrorCode.getFail(), "名称已存在", "Insert${entity}DO", tempVal);
                 return message;
             }
-            ${entity} demo${entity} = new ${entity}();
+            ${entity}DO demo${entity}DO = new ${entity}DO();
             // 此处为对象赋值(把第一个参数对象的属性值赋给第二个参数对象)
-            BeanUtils.copyProperties(vue${entity},demo${entity});
+            BeanUtils.copyProperties(vue${entity}DO,demo${entity}DO);
 
-            if (i${entity}Service.save(demo${entity})) {
-                message = new BoardMessage(ErrorCode.getSuccess(), "", "Insert${entity}", tempVal);
+            if (i${entity}DOService.save(demo${entity}DO)) {
+                message = new BoardMessage(ErrorCode.getSuccess(), "", "Insert${entity}DO", tempVal);
             } else {
-                message = new BoardMessage(ErrorCode.getFail(), "", "Insert${entity}", tempVal);
+                message = new BoardMessage(ErrorCode.getFail(), "", "Insert${entity}DO", tempVal);
             }
         } catch (Exception e) {
-            message = new BoardMessage(ErrorCode.getException(), e.toString(), "Insert${entity}", tempVal);
+            message = new BoardMessage(ErrorCode.getException(), e.toString(), "Insert${entity}DO", tempVal);
         }
         return message;
     }
 
     /**
-     * 修改${entity}
-     * @param vue${entity} 请求参数对象
+     * 修改${entity}DO
+     * @param vue${entity}DO 请求参数对象
      * @return BoardMessage
      */
-    @PostMapping(value = "Update${entity}")
-    @ApiOperation(value = "修改${entity}", notes = "修改${entity}", response = BoardMessage.class)
+    @PostMapping(value = "Update${entity}DO")
+    @ApiOperation(value = "修改${entity}DO", notes = "修改${entity}DO", response = BoardMessage.class)
     @ResponseBody
-    public BoardMessage Update${entity}(@RequestBody Vue${entity} vue${entity}) {
+    public BoardMessage Update${entity}DO(@RequestBody Vue${entity}DO vue${entity}DO) {
 
         // 验证用户信息
         var tempVal = TokenUse.verificationTokenInfo(request);
@@ -200,34 +200,34 @@ public class ${table.controllerName} {
 
         BoardMessage message;
         try {
-            if (i${entity}Service.IsNameExists(vue${entity}.getName(),vue${entity}.getId())) {
-                message = new BoardMessage(ErrorCode.getFail(), "名称已存在", "Update${entity}", tempVal);
+            if (i${entity}DOService.IsNameExists(vue${entity}DO.getName(),vue${entity}DO.getId())) {
+                message = new BoardMessage(ErrorCode.getFail(), "名称已存在", "Update${entity}DO", tempVal);
                 return message;
             }
-            ${entity} demo${entity} = new ${entity}();
+            ${entity}DO demo${entity}DO = new ${entity}DO();
             // 此处为对象赋值(把第一个参数对象的属性值赋给第二个参数对象)
-            BeanUtils.copyProperties(vue${entity},demo${entity});
+            BeanUtils.copyProperties(vue${entity}DO,demo${entity}DO);
 
-            if (i${entity}Service.updateById(demo${entity})) {
-                message = new BoardMessage(ErrorCode.getSuccess(), "", "Update${entity}", tempVal);
+            if (i${entity}DOService.updateById(demo${entity}DO)) {
+                message = new BoardMessage(ErrorCode.getSuccess(), "", "Update${entity}DO", tempVal);
             } else {
-             message = new BoardMessage(ErrorCode.getFail(), "", "Update${entity}", tempVal);
+             message = new BoardMessage(ErrorCode.getFail(), "", "Update${entity}DO", tempVal);
             }
         } catch (Exception e) {
-            message = new BoardMessage(ErrorCode.getException(), e.toString(), "Update${entity}", tempVal);
+            message = new BoardMessage(ErrorCode.getException(), e.toString(), "Update${entity}DO", tempVal);
         }
         return message;
     }
 
     /**
-     * 删除${entity}
-     * @param id ${entity}主键
+     * 删除${entity}DO
+     * @param id ${entity}DO主键
      * @return BoardMessage
      */
-    @PostMapping(value = "Delete${entity}")
-    @ApiOperation(value = "删除${entity}", notes = "删除${entity}", response = BoardMessage.class)
+    @PostMapping(value = "Delete${entity}DO")
+    @ApiOperation(value = "删除${entity}DO", notes = "删除${entity}DO", response = BoardMessage.class)
     @ResponseBody
-    public BoardMessage Delete${entity}(@RequestParam("id") int id){
+    public BoardMessage Delete${entity}DO(@RequestParam("id") int id){
 
         // 验证用户信息
         var tempVal=TokenUse.verificationTokenInfo(request);
@@ -237,26 +237,26 @@ public class ${table.controllerName} {
 
         BoardMessage message;
         try{
-            if(i${entity}Service.removeById(id)){
-                return new BoardMessage(ErrorCode.getSuccess(),"Delete${entity}",tempVal);
+            if(i${entity}DOService.removeById(id)){
+                return new BoardMessage(ErrorCode.getSuccess(),"Delete${entity}DO",tempVal);
             }else{
-                return new BoardMessage(ErrorCode.getFail(),"Delete${entity}",tempVal);
+                return new BoardMessage(ErrorCode.getFail(),"Delete${entity}DO",tempVal);
             }
         }catch(Exception e){
-            message=new BoardMessage(ErrorCode.getException(),e.toString(),"Delete${entity}",tempVal);
+            message=new BoardMessage(ErrorCode.getException(),e.toString(),"Delete${entity}DO",tempVal);
         }
         return message;
     }
 
     /**
-     * 启用/禁用${entity}
-     * @param vue${entity} 请求参数对象 IsEnable,Id 为必要参数
+     * 启用/禁用${entity}DO
+     * @param vue${entity}DO 请求参数对象 IsEnable,Id 为必要参数
      * @return  BoardMessage
      */
-    @PostMapping(value = "Enable${entity}")
-    @ApiOperation(value = " 启用/禁用${entity}", notes = "启用/禁用${entity}", response = BoardMessage.class)
+    @PostMapping(value = "Enable${entity}DO")
+    @ApiOperation(value = " 启用/禁用${entity}DO", notes = "启用/禁用${entity}DO", response = BoardMessage.class)
     @ResponseBody
-    public BoardMessage Enable${entity}(@RequestBody Vue${entity} vue${entity}) {
+    public BoardMessage Enable${entity}DO(@RequestBody Vue${entity}DO vue${entity}DO) {
 
         // 验证用户信息
         var tempVal = TokenUse.verificationTokenInfo(request);
@@ -266,17 +266,17 @@ public class ${table.controllerName} {
 
         BoardMessage message;
         try {
-            ${entity} demo${entity} = new ${entity}();
-            demo${entity}.setIsEnable(vue${entity}.getIsEnable());
-            demo${entity}.setId(vue${entity}.getId());
+            ${entity}DO demo${entity}DO = new ${entity}DO();
+            demo${entity}DO.setIsEnable(vue${entity}DO.getIsEnable());
+            demo${entity}DO.setId(vue${entity}DO.getId());
 
-            if (i${entity}Service.updateById(demo${entity})) {
-                message = new BoardMessage(ErrorCode.getSuccess(), "", "Enable${entity}", tempVal);
+            if (i${entity}DOService.updateById(demo${entity}DO)) {
+                message = new BoardMessage(ErrorCode.getSuccess(), "", "Enable${entity}DO", tempVal);
             } else {
-                message = new BoardMessage(ErrorCode.getFail(), "", "Enable${entity}", tempVal);
+                message = new BoardMessage(ErrorCode.getFail(), "", "Enable${entity}DO", tempVal);
             }
         } catch (Exception e) {
-            message = new BoardMessage(ErrorCode.getException(), e.toString(), "Enable${entity}", tempVal);
+            message = new BoardMessage(ErrorCode.getException(), e.toString(), "Enable${entity}DO", tempVal);
         }
         return message;
     }

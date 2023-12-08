@@ -24,7 +24,8 @@ public class CodeAuto {
 
     private static final String PACKAGE_PARENT = "org.rxy";
 
-    private static final String[] TABLE_LISTS = new String[]{"efm_user"};
+    // 每次都生成该列表中的数据
+    private static final String[] TABLE_LISTS = new String[]{"efm_distributed_lock"};
 
     public static void main(String[] args) {
         // 构建一个代码生成器对象

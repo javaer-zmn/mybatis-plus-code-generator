@@ -15,6 +15,6 @@ import java.util.List;
  * @since ${date}
  */
 @Repository
-public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
-    List<${entity}> find${entity}PageList(Page<${entity}> page,String fuzzySearchStr);
+public interface ${table.mapperName} extends ${superMapperClass}<${entity}DO> {
+    List<${entity}DO> find${entity}DOPageList(Page<${entity}DO> page,String fuzzySearchStr);
 }

@@ -1,6 +1,6 @@
 package ${package.Service};
 
-import ${package.Entity}.${entity};
+import ${package.Entity}.${entity}DO;
 import ${superServiceClassPackage};
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
@@ -14,14 +14,14 @@ import java.util.List;
  * @author ${author}
  * @since ${date}
  */
-public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
+public interface ${table.serviceName} extends ${superServiceClass}<${entity}DO> {
 
         /**
          *  分页查询
          * @param pageQuery 必须要有 page 和 row
          * @return
          */
-        Page<${entity}> select${entity}Page(PageQuery pageQuery);
+        Page<${entity}DO> select${entity}DOPage(PageQuery pageQuery);
 
         boolean IsNameExists(String name, Integer id);
 }
